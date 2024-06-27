@@ -13,18 +13,21 @@ The `cpperm` function copies permissions, owner, and group information from a so
 ```bash
 cpperm <source> <destination>
 
-arameters:
+Parameters:
 <source>: Path to the source file or directory from which permissions are to be copied.
 <destination>: Path to the destination file or directory where the permissions will be applied.
 
+#### Usage
+
+```bash
 cpperm /path/to/source/file /path/to/destination/file
 
 This command will copy the permissions, owner, and group from /path/to/source/file to /path/to/destination/file.
 
-2. swapfiles
+### 2. swapfiles
 The swapfiles function swaps two files by exchanging their names.
 
-Usage:
+#### Usage:
 
 swapfiles <file1> <file2>
 
