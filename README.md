@@ -19,5 +19,4 @@ Fügen Sie die `cpperm` Funktion zu Ihrer Bash-Konfigurationsdatei hinzu (`~/.ba
 Um cpperm zu verwenden, rufen Sie das Skript aus Ihrem Terminal wie folgt auf:
 
 ```bash
-Code kopieren
 cpperm /pfad/zur/quelle /pfad/zum/ziel
