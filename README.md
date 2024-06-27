@@ -1,43 +1,15 @@
-# Shell Utility Functions
+# cpperm - Berechtigungen kopieren
 
-This repository contains useful shell functions designed to simplify certain tasks in your daily workflow. Each function is tailored to solve specific problems efficiently.
+Das Skript `cpperm` ermöglicht das Kopieren von Berechtigungen, Eigentümer und Gruppeninformationen von einer Quelldatei oder einem Quellordner zu einem Zieldatei oder Zielordner unter Linux.
 
-## Functions
+## Funktionsweise
 
-### 1. `cpperm`
+`cpperm` nutzt die Linux-Befehle `stat`, `chmod` und `chown`, um die Berechtigungen sowie die Besitzer- und Gruppeninformationen von einem Objekt (Datei oder Verzeichnis) zu extrahieren und diese auf ein anderes Objekt zu übertragen.
 
-The `cpperm` function copies permissions, owner, and group information from a source file or directory to a destination file or directory.
+## Voraussetzungen
 
-#### Usage:
+Um `cpperm` nutzen zu können, müssen Sie Zugriff auf einen Linux-basierten Computer haben und Berechtigungen besitzen, die es Ihnen erlauben, `chmod` und `chown` auszuführen.
 
-```bash
-cpperm <source> <destination>
+## Installation
 
-Parameters:
-<source>: Path to the source file or directory from which permissions are to be copied.
-<destination>: Path to the destination file or directory where the permissions will be applied.
-
-#### Usage
-
-```bash
-cpperm /path/to/source/file /path/to/destination/file
-
-This command will copy the permissions, owner, and group from /path/to/source/file to /path/to/destination/file.
-
-### 2. swapfiles
-The swapfiles function swaps two files by exchanging their names.
-
-#### Usage:
-
-swapfiles <file1> <file2>
-
-Parameters:
-<file1>: Path to the first file to be swapped.
-<file2>: Path to the second file to be swapped.
-
-swapfiles /path/to/file1 /path/to/file2
-
-This command will swap file1 and file2 by renaming the files.
-
-Installation
-To use these functions, simply add them to your .bashrc or .bash_profile file. This will allow you to access the functions directly from your terminal.
+Fügen Sie die `cpperm` Funktion zu Ihrer Bash-Konfigurationsdatei hinzu (`~/.bashrc`, `~/.bash_profile` oder `~/.profile`)
