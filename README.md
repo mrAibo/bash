@@ -20,3 +20,12 @@ Benutzer müssen Zugriff auf einen Linux-basierten Computer haben und die nötig
 
 ```bash
 cpperm /pfad/zur/quelle /pfad/zum/ziel
+
+
+### 2. swapfiles - Dateien sicher tauschen
+swapfiles ermöglicht es, zwei Dateien sicher zu tauschen, indem temporäre Dateien und ein temporäres Verzeichnis verwendet werden, um Datenverluste zu vermeiden.
+
+##### Funktionsweise
+Das Skript ist besonders nützlich in Szenarien, wo Dateien kritische Informationen enthalten oder sehr groß sind.
+
+Verwendung
