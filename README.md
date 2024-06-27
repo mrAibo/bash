@@ -22,6 +22,7 @@ Um cpperm zu verwenden, rufen Sie das Skript aus Ihrem Terminal wie folgt auf:
 cpperm /pfad/zur/quelle /pfad/zum/ziel
 
 
+
 # swapfiles - Dateien sicher tauschen
 
 Das Bash-Skript `swapfiles` ermöglicht das sichere Tauschen von zwei Dateien auf einem Linux-basierten System. Dieses Skript stellt sicher, dass keine Daten während des Tauschvorgangs verloren gehen.
