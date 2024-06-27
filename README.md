@@ -28,4 +28,7 @@ swapfiles ermöglicht es, zwei Dateien sicher zu tauschen, indem temporäre Date
 ##### Funktionsweise
 Das Skript ist besonders nützlich in Szenarien, wo Dateien kritische Informationen enthalten oder sehr groß sind.
 
-Verwendung
+#### Verwendung
+
+```bash
+swapfiles /pfad/zur/datei1 /pfad/zur/datei2
