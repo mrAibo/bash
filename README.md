@@ -12,3 +12,7 @@ The `cpperm` function copies permissions, owner, and group information from a so
 
 ```bash
 cpperm <source> <destination>
+
+arameters:
+<source>: Path to the source file or directory from which permissions are to be copied.
+<destination>: Path to the destination file or directory where the permissions will be applied.
