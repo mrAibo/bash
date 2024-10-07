@@ -820,17 +820,85 @@ EOF
 
 #Enchanced du
 duu() {
-    local -r BLUE='\033[0;34m'
-    local -r GREEN='\033[0;32m'
-    local -r YELLOW='\033[0;33m'
-    local -r CYAN='\033[0;36m'
-    local -r MAGENTA='\033[0;35m'
-    local -r WHITE='\033[1;37m'
-    local -r BOLD='\033[1m'
-    local -r RESET='\033[0m'
-    local -r BG_BLACK='\033[40m'
+    local usage="Usage: duu [OPTIONS] [DIRECTORY]"
+    local max_depth=1
+    local sort_order="nr"
+    local target_dir="."
 
-    du -k --max-depth=1 "$@" 2>/dev/null | sort -nr | awk -v blue="$BLUE" -v green="$GREEN" -v yellow="$YELLOW" -v cyan="$CYAN" -v magenta="$MAGENTA" -v bold="$BOLD" -v white="$WHITE" -v reset="$RESET" -v bg_black="$BG_BLACK" '
+    # Color definitions
+    local -r BLUE=$'\033[0;34m'
+    local -r GREEN=$'\033[0;32m'
+    local -r YELLOW=$'\033[0;33m'
+    local -r CYAN=$'\033[0;36m'
+    local -r MAGENTA=$'\033[0;35m'
+    local -r WHITE=$'\033[1;37m'
+    local -r BOLD=$'\033[1m'
+    local -r RESET=$'\033[0m'
+    local -r BG_BLACK=$'\033[40m'
+
+    show_help() {
+        cat << EOF
+${BOLD}${WHITE}Disk Usage Utility (duu)${RESET}
+
+${WHITE}Description:${RESET}
+  duu is a colorful and informative disk usage analysis tool.
+
+${WHITE}Syntax:${RESET}
+  duu [OPTIONS] [DIRECTORY]
+
+${WHITE}Options:${RESET}
+  -d, --max-depth DEPTH   Maximum depth to traverse (default: 1)
+  -r, --reverse           Sort in reverse order (smallest first)
+  -h, --help              Show this help message
+  -?                      Show this help message
+
+${WHITE}Examples:${RESET}
+  duu                     Show disk usage of current directory
+  duu /path/to/directory  Show disk usage of specified directory
+  duu -d 2 /home          Show disk usage with max depth of 2 in /home
+  duu --reverse           Show disk usage sorted from smallest to largest
+
+EOF
+    }
+
+    # Manual option parsing
+    while (( "$#" )); do
+        case "$1" in
+            -d|--max-depth)
+                if [ -n "$2" ] && [ ${2:0:1} != "-" ]; then
+                    max_depth=$2
+                    shift 2
+                else
+                    echo "Error: Argument for $1 is missing" >&2
+                    return 1
+                fi
+                ;;
+            -r|--reverse)
+                sort_order="n"
+                shift
+                ;;
+            -h|--help|-\?)
+                show_help
+                return 0
+                ;;
+            -*) # unsupported flags
+                echo "Error: Unsupported flag $1" >&2
+                return 1
+                ;;
+            *) # preserve positional arguments
+                target_dir="$1"
+                shift
+                ;;
+        esac
+    done
+
+    # Validate target directory
+    if [ ! -d "$target_dir" ]; then
+        echo "Error: '$target_dir' is not a valid directory" >&2
+        return 1
+    fi
+
+    du -k --max-depth="$max_depth" "$target_dir" 2>/dev/null | sort -"$sort_order" | awk -v blue="$BLUE" -v green="$GREEN" -v yellow="$YELLOW" -v cyan="$CYAN" -v magenta="$MAGENTA" -v bold="$BOLD" -v white="$WHITE" -v reset="$RESET" -v bg_black="$BG_BLACK" '
     function human_readable(size) {
         units="KMGT"
         for (u=1; size >= 1024 && u < 4; u++) {
@@ -838,7 +906,6 @@ duu() {
         }
         return sprintf("%.2f %s", size, substr(units, u, 1))
     }
-
     function get_color(unit) {
         if (unit == "K") return green
         if (unit == "M") return yellow
@@ -846,7 +913,6 @@ duu() {
         if (unit == "T") return magenta
         return blue
     }
-
     function bar_chart(percentage, width) {
         filled = int(percentage * width / 100)
         empty = width - filled
@@ -855,7 +921,6 @@ duu() {
         for (i = 0; i < empty; i++) bar = bar "░"
         return bar
     }
-
     BEGIN {
         print "\n" bold white bg_black "  Disk Usage Summary  " reset
         print bold white "Size       Unit   Usage    Path" reset
