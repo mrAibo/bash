@@ -1,5 +1,3 @@
-Here's a GitHub-style documentation for the provided `.bashrc` file:
-
 # Enhanced .bashrc Configuration
 
 This `.bashrc` file provides a comprehensive set of configurations, aliases, and functions to enhance your Bash shell experience. It includes history management, shell options, custom prompts, and various utility functions.
