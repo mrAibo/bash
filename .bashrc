@@ -952,14 +952,109 @@ EOF
 
 #swap two files or dirs
 swapf() {
-    if [ $# -ne 2 ] || [ ! -e "$1" ] || [ ! -e "$2" ]; then
-        echo "Usage: swapf <file1> <file2> (both must exist)" >&2
+    local usage="Usage: swapf [OPTION] <file1> <file2>"
+    local BLUE=$'\033[0;34m'
+    local RED=$'\033[0;31m'
+    local GREEN=$'\033[0;32m'
+    local YELLOW=$'\033[0;33m'
+    local RESET=$'\033[0m'
+
+    echo_color() {
+        local color=$1
+        shift
+        echo -e "${color}$@${RESET}"
+    }
+
+    show_help() {
+        cat << EOF
+${YELLOW}Swap Files (swapf) Utility${RESET}
+
+${BLUE}Description:${RESET}
+  swapf is a utility to safely swap the contents of two files or directories.
+
+${BLUE}Syntax:${RESET}
+  swapf [OPTION] <file1> <file2>
+
+${BLUE}Options:${RESET}
+  -h, --help    Display this help message
+  -?            Display this help message
+
+${BLUE}Arguments:${RESET}
+  <file1>       First file or directory to swap
+  <file2>       Second file or directory to swap
+
+${BLUE}Examples:${RESET}
+  swapf file1.txt file2.txt    Swap contents of file1.txt and file2.txt
+  swapf dir1 dir2              Swap contents of dir1 and dir2
+
+${BLUE}Note:${RESET}
+  - Both files/directories must exist.
+  - You cannot swap a file with a directory.
+EOF
+    }
+
+    # Check for help options
+    if [[ "$1" == "-h" || "$1" == "--help" || "$1" == "-?" ]]; then
+        show_help
+        return 0
+    fi
+
+    if [ $# -ne 2 ]; then
+        echo_color "$RED" "Error: Incorrect number of arguments" >&2
+        echo_color "$BLUE" "$usage" >&2
+        return 1
+    fi
+
+    if [ ! -e "$1" ]; then
+        echo_color "$RED" "Error: '$1' does not exist" >&2
+        return 1
+    fi
+
+    if [ ! -e "$2" ]; then
+        echo_color "$RED" "Error: '$2' does not exist" >&2
+        return 1
+    fi
+
+    if [ -d "$1" ] && [ ! -d "$2" ]; then
+        echo_color "$RED" "Error: Cannot swap a directory with a non-directory" >&2
+        return 1
+    fi
+
+    if [ ! -d "$1" ] && [ -d "$2" ]; then
+        echo_color "$RED" "Error: Cannot swap a non-directory with a directory" >&2
         return 1
     fi
 
     local tmp=$(mktemp -d)
-    mv "$1" "$tmp/" && mv "$2" "$1" && mv "$tmp"/* "$2"
+    if [ ! -d "$tmp" ]; then
+        echo_color "$RED" "Error: Failed to create temporary directory" >&2
+        return 1
+    fi
+
+    # Use cp instead of mv for the first operation to preserve the original in case of failure
+    if ! cp -a "$1" "$tmp/"; then
+        echo_color "$RED" "Error: Failed to copy '$1' to temporary location" >&2
+        rm -rf "$tmp"
+        return 1
+    fi
+
+    if ! mv "$2" "$1"; then
+        echo_color "$RED" "Error: Failed to move '$2' to '$1'" >&2
+        rm -rf "$tmp"
+        return 1
+    fi
+
+    if ! mv "$tmp"/* "$2"; then
+        echo_color "$RED" "Error: Failed to move temporary file to '$2'" >&2
+        # Try to revert the changes
+        mv "$1" "$2"
+        mv "$tmp"/* "$1"
+        rm -rf "$tmp"
+        return 1
+    fi
+
     rm -rf "$tmp"
+    echo_color "$GREEN" "Successfully swapped '$1' and '$2'"
 }
 
 
