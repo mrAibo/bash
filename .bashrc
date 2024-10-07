@@ -559,7 +559,7 @@ EOF
 # Create a new directory and enter it
 mkd() {
         mkdir -p "$@"
-        cd "$@" || exit
+        cd "$@" || return 1
 }
 
 rcp() {
