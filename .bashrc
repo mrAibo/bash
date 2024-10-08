@@ -300,7 +300,7 @@ function fawk {
 # }
 
 pac() {
-    local usage="Usage: ex [OPTIONS] file1 [file2 ...]"
+    local usage="Usage: pac [OPTIONS] file1 [file2 ...]"
     local verbose=false
     local target_dir=""
     local delete_after=false
@@ -325,13 +325,13 @@ pac() {
 
     show_help() {
         cat << EOF
-${colors[BLUE]}Extract and Compress (ex) Function Help:${colors[NC]}
+${colors[BLUE]}Extract and Compress (pac) Function Help:${colors[NC]}
 
 Description:
-  ex is a versatile function for extracting and compressing various types of files.
+  pac is a versatile function for extracting and compressing various types of files.
 
 Syntax:
-  ex [OPTIONS] file1 [file2 ...]
+  pac [OPTIONS] file1 [file2 ...]
 
 Options:
   -x, --extract           Extract mode (default)
@@ -358,19 +358,19 @@ Exclude Patterns:
   - For 7z: Use 7z exclude patterns
 
 Examples:
-  ex archive.tar.gz                                    # Extract archive.tar.gz
-  ex --verbose --target /tmp file1.zip file2.rar       # Extract files to /tmp with verbose output
-  ex --compress tar.gz --target /tmp file1 file2       # Compress files to /tmp/archive.tar.gz
-  ex --extract --delete archive.zip                    # Extract and delete archive.zip after extraction
-  ex -c zip -e '*.log' --target /tmp dir1 dir2         # Compress dirs to zip, excluding .log files
-  ex --compress tar.gz --exclude 'temp/' -e '*.tmp' file1  # Compress to tar.gz, excluding temp dir and .tmp files
-  ex -c zip --exclude exclude.txt dir1 dir2            # Compress to zip, using patterns from exclude.txt
+  pac archive.tar.gz                                    # Extract archive.tar.gz
+  pac --verbose --target /tmp file1.zip file2.rar       # Extract files to /tmp with verbose output
+  pac --compress tar.gz --target /tmp file1 file2       # Compress files to /tmp/archive.tar.gz
+  pac --extract --delete archive.zip                    # Extract and delete archive.zip after extraction
+  pac -c zip -e '*.log' --target /tmp dir1 dir2         # Compress dirs to zip, excluding .log files
+  pac --compress tar.gz --exclude 'temp/' -e '*.tmp' file1  # Compress to tar.gz, excluding temp dir and .tmp files
+  pac -c zip --exclude exclude.txt dir1 dir2            # Compress to zip, using patterns from exclude.txt
 EOF
     }
 
     # Use getopt for better long option handling
     local options
-    options=$(getopt -o xc:vt:de:h -l extract,compress:,verbose,target:,delete,exclude:,help -n 'ex' -- "$@")
+    options=$(getopt -o xc:vt:de:h -l extract,compress:,verbose,target:,delete,exclude:,help -n 'pac' -- "$@")
     
     if [ $? -ne 0 ]; then
         echo "Error: Invalid option" >&2
@@ -563,7 +563,7 @@ mkd() {
 }
 
 rcopy() {
-    local usage="Usage: rcp [OPTIONS] source destination"
+    local usage="Usage: rcopy [OPTIONS] source destination"
     local compress=false move=false
     local user="" port="" identity="" limit="" exclude_file=""
     local use_scp=false verbose=false
@@ -583,14 +583,14 @@ rcopy() {
 
     show_help() {
         cat << EOF
-${BLUE}Remote Copy (rcp) Function Help:${RESET}
+${BLUE}Remote Copy (rcopy) Function Help:${RESET}
 
 Description:
-  rcp is a versatile function for copying files/directories locally or to/from remote systems.
+  rcopy is a versatile function for copying files/directories locally or to/from remote systems.
   It supports both rsync and scp, with various options for compression, moving files, and more.
 
 Syntax:
-  rcp [OPTIONS] source destination
+  rcopy [OPTIONS] source destination
 
 Options:
   -z, --compress           Compress the transfer (uses tar and pigz/gzip)
@@ -611,16 +611,16 @@ Exclude Patterns:
   2. Provide a single exclude pattern directly
 
 Examples:
-  rcp /path/to/source user@remote:/path/to/destination
-  rcp --compress --verbose --exclude '*.log' /path/to/source user@remote:/path/to/destination
-  rcp -m -p 2222 -i ~/.ssh/my_key /path/to/source user@remote:/path/to/destination
-  rcp --move --use-scp --exclude exclude.txt /path/to/source user@remote:/path/to/destination
+  rcopy /path/to/source user@remote:/path/to/destination
+  rcopy --compress --verbose --exclude '*.log' /path/to/source user@remote:/path/to/destination
+  rcopy -m -p 2222 -i ~/.ssh/my_key /path/to/source user@remote:/path/to/destination
+  rcopy --move --use-scp --exclude exclude.txt /path/to/source user@remote:/path/to/destination
 EOF
     }
 
     # Use getopt for better long option handling
     local options
-    options=$(getopt -o zmu:p:i:l:e:svh -l compress,move,user:,port:,identity:,limit:,exclude:,use-scp,verbose,help -n 'rcp' -- "$@")
+    options=$(getopt -o zmu:p:i:l:e:svh -l compress,move,user:,port:,identity:,limit:,exclude:,use-scp,verbose,help -n 'rcopy' -- "$@")
     
     if [ $? -ne 0 ]; then
         echo "Error: Invalid option" >&2
@@ -824,7 +824,7 @@ EOF
 
 #Enchanced du
 dug() {
-    local usage="Usage: duu [OPTIONS] [DIRECTORY]"
+    local usage="Usage: dug [OPTIONS] [DIRECTORY]"
     local max_depth=1
     local sort_order="nr"
     local target_dir="."
@@ -842,13 +842,13 @@ dug() {
 
     show_help() {
         cat << EOF
-${BOLD}${WHITE}Disk Usage Utility (duu)${RESET}
+${BOLD}${WHITE}Disk Usage Utility (dug)${RESET}
 
 ${WHITE}Description:${RESET}
-  duu is a colorful and informative disk usage analysis tool.
+  dug is a colorful and informative disk usage analysis tool.
 
 ${WHITE}Syntax:${RESET}
-  duu [OPTIONS] [DIRECTORY]
+  dug [OPTIONS] [DIRECTORY]
 
 ${WHITE}Options:${RESET}
   -d, --max-depth DEPTH   Maximum depth to traverse (default: 1)
@@ -857,10 +857,10 @@ ${WHITE}Options:${RESET}
   -?                      Show this help message
 
 ${WHITE}Examples:${RESET}
-  duu                     Show disk usage of current directory
-  duu /path/to/directory  Show disk usage of specified directory
-  duu -d 2 /home          Show disk usage with max depth of 2 in /home
-  duu --reverse           Show disk usage sorted from smallest to largest
+  dug                     Show disk usage of current directory
+  dug /path/to/directory  Show disk usage of specified directory
+  dug -d 2 /home          Show disk usage with max depth of 2 in /home
+  dug --reverse           Show disk usage sorted from smallest to largest
 
 EOF
     }
@@ -956,7 +956,7 @@ EOF
 
 #swap two files or dirs
 flip() {
-    local usage="Usage: swapf [OPTION] <file1> <file2>"
+    local usage="Usage: flip [OPTION] <file1> <file2>"
     local BLUE=$'\033[0;34m'
     local RED=$'\033[0;31m'
     local GREEN=$'\033[0;32m'
@@ -971,13 +971,13 @@ flip() {
 
     show_help() {
         cat << EOF
-${YELLOW}Swap Files (swapf) Utility${RESET}
+${YELLOW}Swap Files (flip) Utility${RESET}
 
 ${BLUE}Description:${RESET}
-  swapf is a utility to safely swap the contents of two files or directories.
+  flip is a utility to safely swap the contents of two files or directories.
 
 ${BLUE}Syntax:${RESET}
-  swapf [OPTION] <file1> <file2>
+  flip [OPTION] <file1> <file2>
 
 ${BLUE}Options:${RESET}
   -h, --help    Display this help message
@@ -988,8 +988,8 @@ ${BLUE}Arguments:${RESET}
   <file2>       Second file or directory to swap
 
 ${BLUE}Examples:${RESET}
-  swapf file1.txt file2.txt    Swap contents of file1.txt and file2.txt
-  swapf dir1 dir2              Swap contents of dir1 and dir2
+  flip file1.txt file2.txt    Swap contents of file1.txt and file2.txt
+  flip dir1 dir2              Swap contents of dir1 and dir2
 
 ${BLUE}Note:${RESET}
   - Both files/directories must exist.
