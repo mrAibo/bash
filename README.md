@@ -9,9 +9,9 @@ This `.bashrc` file provides a comprehensive set of configurations, aliases, and
 3. [Aliases](#aliases)
 4. [Functions](#functions)
    - [venv_manager](#venv_manager)
-   - [ex (Extract and Compress)](#ex-extract-and-compress)
-   - [rcp (Remote Copy)](#rcp-remote-copy)
-   - [duu (Enhanced du)](#duu-enhanced-du)
+   - [pac (Extract and Compress)](#pac-extract-and-compress)
+   - [rcopy (Remote Copy)](#rcp-remote-copy)
+   - [dug (Enhanced du)](#dug-enhanced-du)
    - [Other Utility Functions](#other-utility-functions)
 
 ## History Configuration
@@ -51,13 +51,13 @@ Usage:
 venv_manager {create|remove|activate|deactivate|status|howto} [venv_dir] [python_executable]
 ```
 
-### ex (Extract and Compress)
+### pac (Extract and Compress)
 
 A versatile function for extracting and compressing various types of archives.
 
 Usage:
 ```bash
-ex [OPTIONS] file1 [file2 ...]
+pac [OPTIONS] file1 [file2 ...]
 ```
 
 Options:
@@ -68,13 +68,13 @@ Options:
 - `-d`, `--delete`: Delete original file(s) after operation
 - `-e`, `--exclude` pattern: Exclude files/directories matching the pattern
 
-### rcp (Remote Copy)
+### rcopy (Remote Copy)
 
 A function for copying files/directories locally or to/from remote systems, supporting both rsync and scp.
 
 Usage:
 ```bash
-rcp [OPTIONS] source destination
+rcopy [OPTIONS] source destination
 ```
 
 Options:
@@ -88,19 +88,19 @@ Options:
 - `-s`, `--use-scp`: Force using SCP instead of rsync
 - `-v`, `--verbose`: Verbose output
 
-### duu (Enhanced du)
+### dug (Enhanced du)
 
 An enhanced version of the `du` command with color-coded output and a bar chart.
 
 Usage:
 ```bash
-duu [directory]
+dug [directory]
 ```
 
 ### Other Utility Functions
 
 - `mkd`: Create a new directory and enter it
-- `swapf`: Swap two files or directories
+- `flip`: Swap two files or directories
 - `evi`: Create and edit a new script file
 - `topm`: Display top 20 memory-consuming processes
 - `topc`: Display top 20 CPU-consuming processes
