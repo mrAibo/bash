@@ -569,21 +569,21 @@ rcp() {
     local use_scp=false verbose=false
 
     # Color definitions
-    local GREEN='\033[0;32m'
-    local RED='\033[0;31m'
-    local YELLOW='\033[0;33m'
-    local BLUE='\033[0;34m'
-    local NC='\033[0m' # No Color
+    local GREEN=$'\033[0;32m'
+    local RED=$'\033[0;31m'
+    local YELLOW=$'\033[0;33m'
+    local BLUE=$'\033[0;34m'
+    local RESET=$'\033[0m'
 
     echo_color() {
         local color=$1
         shift
-        echo -e "${color}$@${NC}"
+        echo -e "${color}$@${RESET}"
     }
 
     show_help() {
         cat << EOF
-${BLUE}Remote Copy (rcp) Function Help:${NC}
+${BLUE}Remote Copy (rcp) Function Help:${RESET}
 
 Description:
   rcp is a versatile function for copying files/directories locally or to/from remote systems.
@@ -610,20 +610,11 @@ Exclude Patterns:
   1. Specify a file containing exclude patterns (one per line)
   2. Provide a single exclude pattern directly
 
-  Pattern examples:
-  - /path/to/file.bac       Exclude a single file
-  - /path/to/*.bac          Exclude all .bac files in the specified directory
-  - /path/to                Exclude an entire directory
-  - /path/to/*              Exclude the contents of a directory, but not the directory itself
-  - *.tmp                   Exclude all files ending with .tmp in any directory
-  - /path/to/dir/*.{jpg,png,gif}  Exclude all jpg, png, and gif files in the specified directory
-
 Examples:
-  rcp /path/to/source /path/to/destination
+  rcp /path/to/source user@remote:/path/to/destination
   rcp --compress --verbose --exclude '*.log' /path/to/source user@remote:/path/to/destination
   rcp -m -p 2222 -i ~/.ssh/my_key /path/to/source user@remote:/path/to/destination
   rcp --move --use-scp --exclude exclude.txt /path/to/source user@remote:/path/to/destination
-  rcp -z -l 1000 -e '**/*.tmp' /path/to/source user@remote:/path/to/destination
 EOF
     }
 
@@ -754,10 +745,14 @@ EOF
             dest="${user}@${dest}"
         fi
 
-        # For SCP, we need to filter files before transfer
+        # For SCP, we need to filter files before transfer if exclusions are specified
         if [ -n "$exclude_file" ] && ! $compress; then
             local temp_src=$(mktemp -d)
-            rsync -a $(generate_rsync_excludes "${exclude_patterns[@]}") "$src/" "$temp_src/"
+            if [ -d "$src" ]; then
+                rsync -a $(generate_rsync_excludes "${exclude_patterns[@]}") "$src/" "$temp_src/"
+            else
+                rsync -a $(generate_rsync_excludes "${exclude_patterns[@]}") "$src" "$temp_src/"
+            fi
             src="$temp_src"
         fi
     else
@@ -773,11 +768,20 @@ EOF
     $verbose && echo_color $YELLOW "Command: $transfer_cmd $transfer_opts $src $dest"
 
     echo_color $GREEN "Transferring $src to $dest..."
-    if ! eval $transfer_cmd $transfer_opts \"$src/\" \"$dest\"; then
-        echo_color $RED "Transfer failed."
-        $compress && rm -rf "$temp_dir"
-        $use_scp && [ -n "$exclude_file" ] && ! $compress && rm -rf "$temp_src"
-        return 1
+    if [ -d "$src" ]; then
+        if ! eval $transfer_cmd $transfer_opts \"$src/\" \"$dest\"; then
+            echo_color $RED "Transfer failed."
+            $compress && rm -rf "$temp_dir"
+            $use_scp && [ -n "$exclude_file" ] && ! $compress && rm -rf "$temp_src"
+            return 1
+        fi
+    else
+        if ! eval $transfer_cmd $transfer_opts \"$src\" \"$dest\"; then
+            echo_color $RED "Transfer failed."
+            $compress && rm -rf "$temp_dir"
+            $use_scp && [ -n "$exclude_file" ] && ! $compress && rm -rf "$temp_src"
+            return 1
+        fi
     fi
 
     if $compress; then
