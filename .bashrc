@@ -299,7 +299,7 @@ function fawk {
 #     fi
 # }
 
-ex() {
+pac() {
     local usage="Usage: ex [OPTIONS] file1 [file2 ...]"
     local verbose=false
     local target_dir=""
@@ -562,7 +562,7 @@ mkd() {
         cd "$@" || return 1
 }
 
-rcp() {
+rcopy() {
     local usage="Usage: rcp [OPTIONS] source destination"
     local compress=false move=false
     local user="" port="" identity="" limit="" exclude_file=""
@@ -823,7 +823,7 @@ EOF
 
 
 #Enchanced du
-duu() {
+dug() {
     local usage="Usage: duu [OPTIONS] [DIRECTORY]"
     local max_depth=1
     local sort_order="nr"
@@ -955,7 +955,7 @@ EOF
 
 
 #swap two files or dirs
-swapf() {
+flip() {
     local usage="Usage: swapf [OPTION] <file1> <file2>"
     local BLUE=$'\033[0;34m'
     local RED=$'\033[0;31m'
